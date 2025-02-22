@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Clicker Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa; /* Göz yormayan açıq rəng */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #2d2d2d;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .coin {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #cd7f32; /* Bürünc rəngi */
+            margin: 0 auto;
+            text-align: center;
+            line-height: 100px;
+            font-size: 36px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .coin:hover {
+            transform: scale(1.1);
+        }
+
+        .status {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .status div {
+            font-size: 18px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .tasks {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .tasks ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .tasks li {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .ranking {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .ranking ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .ranking li {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Coin Clicker Game</h1>
+    </div>
+
+    <div class="score">
+        <p>Xal: <span id="score">0</span></p>
+        <p>Reytinq: <span id="ranking"></span></p>
+    </div>
+
+    <div class="coin" id="coin" onclick="increaseScore()">🎁</div>
+
+    <div class="status">
+        <div id="level">Bronz</div>
+        <div id="tasksButton">
+            <button class="button" onclick="showTasks()">Tapşırıqlar</button>
+        </div>
+    </div>
+
+    <div class="tasks" id="taskSection" style="display:none;">
+        <h2>Tapşırıqlar</h2>
+        <ul>
+            <li>Hər 100 xal topladıqca yeni tapşırıq əldə edəcəksiniz!</li>
+            <li>Yığdığınız xallar ilə daha çox əşyalar əldə edin.</li>
+        </ul>
+        <button class="button" onclick="closeTasks()">Bağla</button>
+    </div>
+
+    <div class="ranking" id="rankingSection">
+        <h2>Sıralama</h2>
+        <ul id="rankingList">
+            <!-- Buraya sıralama gələcək -->
+        </ul>
+        <button class="button" onclick="addToRanking()">Sıralamaya əlavə et</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let playerRanking = [];
+        let currentLevel = "Bronz";
+
+        function increaseScore() {
+            score++;
+            document.getElementById("score").textContent = score;
+            updateLevel();
+        }
+
+        function updateLevel() {
+            if (score >= 100) {
+                currentLevel = "Platin";
+            }
+            if (score >= 200) {
+                currentLevel = "Qızıl";
+            }
+            if (score >= 300) {
+                currentLevel = "Elmas";
+            }
+            document.getElementById("level").textContent = currentLevel;
+        }
+
+        function showTasks() {
+            document.getElementById("taskSection").style.display = "block";
+        }
+
+        function closeTasks() {
+            document.getElementById("taskSection").style.display = "none";
+        }
+
+        function addToRanking() {
+            if (playerRanking.length < 5) {
+                playerRanking.push(score);
+            } else {
+                playerRanking[4] = score;
+            }
+            playerRanking.sort((a, b) => b - a); // Descending order
+            updateRanking();
+        }
+
+        function updateRanking() {
+            let rankingList = document.getElementById("rankingList");
+            rankingList.innerHTML = ""; // Clear previous list
+            playerRanking.forEach((score, index) => {
+                let listItem = document.createElement("li");
+                listItem.textContent = `Rank ${index + 1}: ${score} xal`;
+                rankingList.appendChild(listItem);
+            });
+        }
+    </script>
+
+</body>
+</html>
